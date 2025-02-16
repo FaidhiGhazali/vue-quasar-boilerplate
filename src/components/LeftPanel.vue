@@ -25,9 +25,10 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
-import { computed } from 'vue';
+import { ref,computed } from 'vue';
 
 const route = useRoute();
+const leftDrawerOpen = ref(false);
 
 const isActive = (path) => computed(() => route.path === path).value;
 

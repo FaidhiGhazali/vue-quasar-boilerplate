@@ -60,6 +60,8 @@ const onLogin = () => {
   loading.value = true
   if (username.value === "admin" && password.value === "admin") {
     setTimeout(() => {
+      localStorage.setItem("token", "sample_token_123");
+      router.replace("/");
       router.push("/");
       loading.value= false
       }, 2000)

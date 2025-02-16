@@ -7,19 +7,34 @@
           round
           icon="menu"
           aria-label="Menu"
-          @click="$emit('toggle-drawer')"
+          @click="emit('toggle-drawer')"
         />
 
         <q-toolbar-title>
           Quasar App
         </q-toolbar-title>
 
+        <q-btn
+        flat
+        dense
+        icon="logout"
+        label="Logout"
+        @click="logout"
+      />
+
       </q-toolbar>
     </q-header>
 
 </template>
 <script setup>
+import { useRouter } from 'vue-router';
 
-defineEmits(['toggle-drawer']);
+const emit = defineEmits(['toggle-drawer'])
+const router = useRouter();
+
+const logout = () => {
+  localStorage.removeItem('token');
+  router.replace('/login');
+};
 
 </script>
