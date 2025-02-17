@@ -14,14 +14,16 @@ export default defineRouter(function () {
   })
 
   Router.beforeEach((to, from, next) => {
-    const isAuthenticated = !!localStorage.getItem('token')
+    const isAuthenticated = !!localStorage.getItem('token');
 
-    if (to.path !== '/login' && !isAuthenticated) {
-      next('/login')
+    if (!isAuthenticated && to.path !== '/login') {
+      next('/login');
+    } else if (isAuthenticated && to.path === '/login') {
+      next('/');
     } else {
-      next()
+      next();
     }
-  })
+  });
 
   return Router
 })

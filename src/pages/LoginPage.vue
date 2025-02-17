@@ -50,30 +50,24 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useConfigStore } from "../stores/example-store";
 
 const router = useRouter();
 const username = ref("");
 const password = ref("");
 const loading = ref(false)
 
-const onLogin = () => {
-  loading.value = true
-  if (username.value === "admin" && password.value === "admin") {
-    setTimeout(() => {
-      localStorage.setItem("token", "sample_token_123");
-      router.replace("/");
-      router.push("/");
-      loading.value= false
-      }, 2000)
+const configStore = useConfigStore();
 
+const onLogin = async () => {
+  loading.value = true;
+  const result = await configStore.login(username.value, password.value);
+  if (result.success) {
+    router.replace("/");
   } else {
-    setTimeout(() => {
-      alert("Invalid credentials");
-      loading.value= false
-      }, 1000)
-
-
+    alert("Login failed: " + result.message);
   }
+  loading.value = false;
 };
 
 const forgotPassword = () => {

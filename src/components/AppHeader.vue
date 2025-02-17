@@ -19,7 +19,7 @@
         dense
         icon="logout"
         label="Logout"
-        @click="logout"
+        @click="onLogout"
       />
 
       </q-toolbar>
@@ -28,13 +28,15 @@
 </template>
 <script setup>
 import { useRouter } from 'vue-router';
+import { useConfigStore } from "../stores/example-store";
 
 const emit = defineEmits(['toggle-drawer'])
 const router = useRouter();
+const configStore = useConfigStore();
 
-const logout = () => {
-  localStorage.removeItem('token');
-  router.replace('/login');
+const onLogout = () => {
+  configStore.logout();
+  router.replace("/login");
 };
 
 </script>

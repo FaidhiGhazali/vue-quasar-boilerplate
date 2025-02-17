@@ -1,21 +1,39 @@
-import { defineStore, acceptHMRUpdate } from 'pinia'
+import { defineStore, acceptHMRUpdate } from "pinia";
+import axios from "axios";
 
-export const useCounterStore = defineStore('counter', {
+export const useConfigStore = defineStore("config", {
   state: () => ({
-    counter: 0
+    apiBaseUrl: "https://dummyjson.com/",
+    token: localStorage.getItem("token") || null,
   }),
 
-  getters: {
-    doubleCount: (state) => state.counter * 2
-  },
-
   actions: {
-    increment() {
-      this.counter++
-    }
-  }
-})
+    async login(username, password) {
+      try {
+        const response = await axios.post(`${this.apiBaseUrl}auth/login`, {
+          username,
+          password,
+        });
+
+        if (response.data.accessToken) {
+          this.token = response.data.accessToken;
+          localStorage.setItem("token", response.data.accessToken);
+          return { success: true };
+        } else {
+          return { success: false, message: "Invalid credentials" };
+        }
+      } catch (error) {
+        return { success: false, message: error.response?.data?.message || error.message };
+      }
+    },
+
+    logout() {
+      this.token = null;
+      localStorage.removeItem("token");
+    },
+  },
+});
 
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useCounterStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useConfigStore, import.meta.hot));
 }
